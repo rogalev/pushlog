@@ -18,10 +18,11 @@ type (
 	}
 
 	TelegramPublisherConfig struct {
-		Token      string `json:"token"`
-		Chat       int64  `json:"chat"`
-		SendAsFile bool   `json:"sendAsFile"`
-		TmpFileDir string `json:"tmpFileDir"`
+		Token         string `json:"token"`
+		Chat          int64  `json:"chat"`
+		SendAsFile    bool   `json:"sendAsFile"`
+		TmpFileDir    string `json:"tmpFileDir"`
+		SendFileDelay int    `json:"sendFileDelay"`
 	}
 
 	MemoryStorageConfig struct {
@@ -57,10 +58,11 @@ func getDefaultConfig() Config {
 		},
 
 		TelegramPublisher: TelegramPublisherConfig{
-			Token:      "",
-			Chat:       0,
-			SendAsFile: true,
-			TmpFileDir: "/tmp",
+			Token:         "",
+			Chat:          0,
+			SendAsFile:    true,
+			TmpFileDir:    "/tmp",
+			SendFileDelay: 10,
 		},
 
 		MemoryStorage: MemoryStorageConfig{

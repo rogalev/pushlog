@@ -16,24 +16,29 @@ import (
 )
 
 type TelegramPublisher struct {
-	token      string
-	chat       int64
-	sendAsFile bool
-	tmpFileDir string
+	token         string
+	chat          int64
+	sendAsFile    bool
+	tmpFileDir    string
+	sendFileDelay time.Duration
 
 	botApi *tgbotapi.BotAPI
 }
 
 func NewTelegramPublisher(cfg config.TelegramPublisherConfig) *TelegramPublisher {
 	return &TelegramPublisher{
-		token:      cfg.Token,
-		chat:       cfg.Chat,
-		sendAsFile: cfg.SendAsFile,
-		tmpFileDir: cfg.TmpFileDir,
+		token:         cfg.Token,
+		chat:          cfg.Chat,
+		sendAsFile:    cfg.SendAsFile,
+		tmpFileDir:    cfg.TmpFileDir,
+		sendFileDelay: time.Duration(cfg.SendFileDelay) * time.Second,
 	}
 }
 
 func (p *TelegramPublisher) Run(ctx context.Context, s storage.Storage) error {
+
+	var ticker *time.Ticker
+
 	logger := logging.GetInstance()
 
 	bot, err := tgbotapi.NewBotAPI(p.token)
@@ -42,7 +47,11 @@ func (p *TelegramPublisher) Run(ctx context.Context, s storage.Storage) error {
 	}
 	p.botApi = bot
 
-	ticker := time.NewTicker(50 * time.Millisecond)
+	if p.sendAsFile {
+		ticker = time.NewTicker(p.sendFileDelay)
+	} else {
+		ticker = time.NewTicker(50 * time.Millisecond)
+	}
 
 L:
 	for {
