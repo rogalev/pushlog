@@ -1,11 +1,18 @@
-### Installation
-
+Installation
+---
 ```
-go get github.com/rogalev/pushlog
+> git clone https://github.com/rogalev/pushlog.git 
+> cd pushlog
+> make build
 ```
+The compiled file will be located in the pushlog/.bin directory
 
-### Usage
+**Before executing the "make build" command, please make sure that golang is installed on your working machine**
 
+
+
+Usage
+---
 #### Run application
 
 ```
